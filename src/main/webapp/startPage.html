@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather page</title>
+</head>
+<body>
+<script>
+    function getWeather(city) {
+        let request = new XMLHttpRequest()
+
+        let json = {
+            "city": city
+        };
+
+        request.open('POST', '/handleWeather', false)
+        request.setRequestHeader('Content-Type', 'application/json')
+        request.send(JSON.stringify(json))
+
+        if (request.status !== 200) {
+            alert('this city doesn\'t exists')
+        } else if (request.status === 200){
+            let response = JSON.parse(request.response)
+
+            let html = '<tr>' +
+                '<th>Description</th>' +
+                '<th>Temperature</th>' +
+                '<th>Feels like</th>' +
+                '<th>Min Temperature</th>' +
+                '<th>Max Temperature</th>' +
+                '<th>Humidity</th>' +
+                '<th>Pressure</th>' +
+                '<th>Wind</th>' +
+                '</tr>'
+
+            document.getElementById('weather_result').innerHTML = html +
+                '<tr>' +
+                '<td>' + response['description'] + '</td>' +
+                '<td>' + response['temp'] + '</td>' +
+                '<td>' + response['feels_like'] + '</td>' +
+                '<td>' + response['temp_min'] + '</td>' +
+                '<td>' + response['temp_max'] + '</td>' +
+                '<td>' + response['humidity'] + '</td>' +
+                '<td>' + response['pressure'] + '</td>' +
+                '<td>' + response['wind_speed'] + '</td>' +
+                '</tr>'
+        }
+
+    }
+</script>
+<h1>Search page</h1>
+<br>
+<label>
+    <input id="city" name="city" placeholder="City">
+    Search by city
+</label>
+<button onclick="getWeather(document.getElementById('city').value)">Get weather of town</button>
+<br>
+<br>
+<br>
+<table id="weather_result">
+
+</table>
+</body>
+</html>
